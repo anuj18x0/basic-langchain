@@ -16,30 +16,20 @@ from pydantic import BaseModel
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
 
-# ---------------------------------------------------------------------------
-# Configuration
-# ---------------------------------------------------------------------------
 load_dotenv()
-
-# Google AI Studio API key
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
 
 CHARTS_DIR = Path("charts")
 CHARTS_DIR.mkdir(exist_ok=True)
 
-# ---------------------------------------------------------------------------
-# In-memory response cache with fuzzy matching
-# ---------------------------------------------------------------------------
 from difflib import SequenceMatcher
 
-# Common filler / stop words + domain words that don't change the meaning
 _STOP_WORDS = {
     "a", "an", "the", "of", "in", "on", "for", "to", "is", "was", "were",
     "are", "it", "its", "this", "that", "and", "or", "but", "with", "from",
     "by", "at", "do", "does", "did", "can", "could", "will", "would",
     "should", "shall", "may", "might", "please", "me", "my", "i",
-    # Domain‑specific words – these appear in many Titanic questions
-    "titanic", "dataset", "data", "passengers", "ship",
+    "titanic", "dataset", "data"
 }
 
 SIMILARITY_THRESHOLD = 0.93  # 93 % match → cache hit
@@ -69,9 +59,7 @@ def _store_cache(question: str, response: dict) -> None:
 
 DATA_PATH = Path("data/Titanic-Dataset.csv")
 
-# ---------------------------------------------------------------------------
-# Load & light‑clean the dataset once at startup
-# ---------------------------------------------------------------------------
+
 df = pd.read_csv(DATA_PATH)
 df.columns = df.columns.str.strip()
 
@@ -81,9 +69,6 @@ DATASET_DESCRIPTION = (
     + "\n\nKey columns: Survived (0/1), Pclass (1‑3), Sex, Age, Fare, Embarked (C/Q/S)."
 )
 
-# ---------------------------------------------------------------------------
-# LangChain agent
-# ---------------------------------------------------------------------------
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     google_api_key=GOOGLE_API_KEY,
@@ -124,9 +109,7 @@ agent = create_pandas_dataframe_agent(
     handle_parsing_errors=True,
 )
 
-# ---------------------------------------------------------------------------
-# FastAPI app
-# ---------------------------------------------------------------------------
+
 app = FastAPI(title="Titanic Chat Agent")
 
 app.add_middleware(
