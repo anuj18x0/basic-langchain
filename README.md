@@ -51,7 +51,7 @@ An AI-powered chat agent that lets you explore the Titanic dataset through natur
 
 ```bash
 git clone <your-repo-url>
-cd tailor-talk
+cd basic-langchain
 ```
 
 ### 2. Create a virtual environment
@@ -106,7 +106,7 @@ Open [http://localhost:8501](http://localhost:8501) in your browser and start ch
 ## Project Structure
 
 ```
-tailor-talk/
+basic-langchain/
 ├── main.py              # FastAPI backend + LangChain agent
 ├── app.py               # Streamlit chat frontend
 ├── data/
