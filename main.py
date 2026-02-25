@@ -42,7 +42,7 @@ _STOP_WORDS = {
     "titanic", "dataset", "data", "passengers", "ship",
 }
 
-SIMILARITY_THRESHOLD = 0.85  # 85 % match → cache hit
+SIMILARITY_THRESHOLD = 0.93  # 85 % match → cache hit
 
 _cache: list[tuple[str, dict]] = []  # [(normalized_question, response_dict), ...]
 
