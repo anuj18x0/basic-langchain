@@ -42,7 +42,7 @@ _STOP_WORDS = {
     "titanic", "dataset", "data", "passengers", "ship",
 }
 
-SIMILARITY_THRESHOLD = 0.93  # 85 % match → cache hit
+SIMILARITY_THRESHOLD = 0.93  # 93 % match → cache hit
 
 _cache: list[tuple[str, dict]] = []  # [(normalized_question, response_dict), ...]
 
@@ -107,10 +107,12 @@ RULES
 4. If a question is ambiguous, make a reasonable assumption and state it.
 5. For percentage calculations round to 2 decimal places.
 6. If the question is NOT related to the Titanic dataset or data analysis,
-   politely decline and say: "I'm specifically designed to help with the
-   Titanic dataset. Please ask me something about Titanic passengers,
-   their survival, demographics, or related statistics."
+   you MUST immediately respond with EXACTLY this format (no code, no tools):
+   Final Answer: I'm specifically designed to help with the Titanic dataset.
+   Please ask me something about Titanic passengers, their survival,
+   demographics, or related statistics.
    Do NOT attempt to run any code for irrelevant questions.
+7. IMPORTANT: Always wrap your final response using "Final Answer: <your response>".
 """
 
 agent = create_pandas_dataframe_agent(
