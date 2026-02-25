@@ -191,6 +191,9 @@ async def get_chart(filename: str):
         return {"error": "Chart not found"}
     return FileResponse(path, media_type="image/png")
 
+@app.get("/")
+async def root():
+    return {"message": "Welcome to the Titanic Chat Agent API"}
 
 if __name__ == "__main__":
     import uvicorn
