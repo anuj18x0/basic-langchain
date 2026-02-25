@@ -6,6 +6,7 @@ import os
 load_dotenv()
 
 API_URL = os.getenv("API_URL")
+APP_PASSWORD = os.getenv("APP_PASSWORD")
 
 st.set_page_config(
     page_title="Titanic Dataset Chat Agent",
@@ -31,6 +32,33 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# ---------------------------------------------------------------------------
+# Password gate
+# ---------------------------------------------------------------------------
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+if not st.session_state.authenticated:
+    st.title("🔒 Titanic Dataset Chat Agent")
+    st.caption("To prevent api abuse, i added password.")
+    st.caption("HINT : YOUR ORGANIZATION (no space , all small characters, or check assessment submission)")
+
+    with st.form("password_form"):
+        password = st.text_input("Password", type="password", placeholder="Enter password…")
+        submitted = st.form_submit_button("Unlock", use_container_width=True)
+
+        if submitted:
+            if password == APP_PASSWORD:
+                st.session_state.authenticated = True
+                st.rerun()
+            else:
+                st.error("❌ Incorrect password. Please try again.")
+
+    st.stop()  # Block everything below until authenticated
+
+# ---------------------------------------------------------------------------
+# Main app (only accessible after authentication)
+# ---------------------------------------------------------------------------
 st.title("🚢 Titanic Dataset Chat Agent")
 st.caption(
     "Ask me anything about the Titanic passengers — I can crunch numbers and draw charts!"
